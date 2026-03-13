@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"github.com/misbahul-alam/notepad-api/internal/config"
 	"github.com/misbahul-alam/notepad-api/internal/db"
+	"github.com/misbahul-alam/notepad-api/internal/db/sqlc"
+	"github.com/misbahul-alam/notepad-api/internal/router"
 )
 
 func main() {
@@ -12,9 +13,11 @@ func main() {
 	conn := db.NewPostgres(dbURL)
 	defer conn.Close()
 
-	server := gin.Default()
+	queries := sqlc.New(conn)
 
-	err := server.Run(":8080")
+	r := router.SetupRouter(queries, cfg)
+
+	err := r.Run(":8080")
 	if err != nil {
 		return
 	}

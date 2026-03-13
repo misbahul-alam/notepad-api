@@ -8,7 +8,8 @@ import (
 )
 
 type Config struct {
-	DB DatabaseConfig
+	DB  DatabaseConfig
+	JWT JWTConfig
 }
 
 func Load() *Config {
@@ -25,6 +26,10 @@ func Load() *Config {
 			Password: os.Getenv("DB_PASSWORD"),
 			DBName:   os.Getenv("DB_NAME"),
 			SSLMode:  os.Getenv("DB_SSL_MODE"),
+		},
+		JWT: JWTConfig{
+			Secret:          os.Getenv("JWT_SECRET"),
+			ExpirationHours: 24 * 30,
 		},
 	}
 }
